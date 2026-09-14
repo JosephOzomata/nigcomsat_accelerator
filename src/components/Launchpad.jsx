@@ -55,7 +55,7 @@ function Launchpad() {
           {data.ctaLabel && (
             <Link
               to={data.ctaLink || '/apply'}
-              className="bg-black text-white px-8 py-4 rounded-full hover:bg-gray-100 transition duration-300"
+              className="bg-black text-white px-8 py-4 rounded-full hover:bg-gray-900 hover:shadow font-semibold transition duration-500"
             >
               {data.ctaLabel}
             </Link>

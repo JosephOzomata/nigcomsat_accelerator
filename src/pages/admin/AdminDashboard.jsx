@@ -6,6 +6,8 @@ import {
   Rocket,
   Calendar,
   Code2,
+  Settings,
+  Mail,
   Users,
   Briefcase,
   Info,
@@ -22,8 +24,10 @@ const cards = [
   { to: '/admin/applications', label: 'Applications', desc: 'Review and contact applicants', icon: Inbox },
   { to: '/admin/hackathons', label: 'Hackathons', desc: 'Current and past hackathons', icon: Code2 },
   { to: '/admin/alumni', label: 'Alumni', desc: 'Accelerator alumni', icon: Trophy },
+  { to: '/admin/newsletter',label: 'Newsletter',desc: 'Subscribers and email broadcasts',icon: Mail,},
   { to: '/admin/mentors', label: 'Mentors', desc: 'Mentor profiles by cohort', icon: Users },
   { to: '/admin/portfolio', label: 'Portfolio', desc: 'Portfolio entries', icon: Briefcase },
+  { to: '/admin/application-settings', label: 'Apply Settings', desc: 'Open or close applications', icon: Settings,},
   { to: '/admin/site-info', label: 'Site Info', desc: 'Footer, contact, and social links', icon: Info },
 ];
 

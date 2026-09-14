@@ -212,7 +212,7 @@ const SignupForm = () => {
   );
 
   const inputBase =
-    'w-full rounded-lg border px-3.5 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:border-transparent';
+    'w-full text-lg rounded-lg border px-3.5 py-2.5  text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:bg-white focus:z-[50] focus:border-transparent';
   const inputOk = 'border-gray-200 bg-white';
   const inputErr = 'border-rose-400 bg-rose-50/50';
 

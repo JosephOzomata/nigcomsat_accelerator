@@ -7,7 +7,7 @@ const Cohort3 = () => {
     theme: 'Innovation in Orbit — 2025/2026 Cycle',
     year: '2026',
     launchDate: 'February 27, 2026',
-    duration: '6 months',
+    // duration: '6 months',
     applications: '500+',
     startups: '',
     tagline:

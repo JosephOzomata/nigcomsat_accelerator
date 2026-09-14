@@ -1,6 +1,7 @@
 // src/pages/Events.jsx
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import  logo  from '../images/Logo/superlogo.png'
 import {
   Calendar,
   MapPin,
@@ -165,9 +166,8 @@ const Events = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
-          <span className="text-sm text-gray-500">Loading events...</span>
+        <div className="flex flex-col animate-pulse items-center gap-3">
+          <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
         </div>
       </div>
     );
@@ -184,7 +184,7 @@ const Events = () => {
             transition={{ duration: 0.5 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight mb-4">
+            <h1 className="text-4xl mt-5 md:text-6xl font-bold text-gray-900 tracking-tight mb-4">
               Events
             </h1>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl">

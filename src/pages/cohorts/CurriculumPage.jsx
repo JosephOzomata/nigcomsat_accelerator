@@ -45,23 +45,8 @@ const CurriculumPage = () => {
             transition={{ duration: 0.5 }}
             className="max-w-3xl"
           >
-            <Link
-              to="/accelerator"
-              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-6 transition"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back to Accelerator
-            </Link>
 
-            <div className="flex items-center gap-3 mb-4">
-              <span className="px-3 py-1 text-xs font-medium bg-black text-white rounded-full">
-                Curriculum
-              </span>
-              <span className="text-sm text-gray-500">
-                What startups learn
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight mb-4">
+            <h1 className="text-4xl mt-5 md:text-6xl font-bold text-gray-900 tracking-tight mb-4">
               Inside the Programme
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl">

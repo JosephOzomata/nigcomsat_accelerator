@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo } from 'react';
 import {
   LayoutDashboard,
   Play,
+  Mail,
+  Settings,
   Rocket,
   Calendar,
   Code2,
@@ -31,9 +33,11 @@ const navItems = [
   { to: '/admin/alumni', label: 'Alumni', icon: Trophy },
   { to: '/admin/mentors', label: 'Mentors', icon: Users },
   { to: '/admin/portfolio', label: 'Portfolio', icon: Briefcase },
+  { to: '/admin/newsletter', label: 'Newsletter', icon: Mail },
   { to: '/admin/gallery', label: 'Gallery', icon: Images },
   { to: '/admin/curriculum', label: 'Curriculum', icon: BookOpen },
   { to: '/admin/applications', label: 'Applications', icon: Inbox },
+  { to: '/admin/application-settings', label: 'Apply Settings', icon: Settings },
   { to: '/admin/site-info', label: 'Site Info', icon: Info },
 ];
 
@@ -41,19 +45,44 @@ const AdminLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [applications, setApplications] = useState([]);
 
-  /* Subscribe to applications — one listener for the whole admin session */
+  /* Live data for badges */
+  const [applications, setApplications] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+
   useEffect(() => {
-    const unsub = subscribeCollection('applications', setApplications);
-    return () => unsub();
+    const unsubApps = subscribeCollection('applications', setApplications);
+    const unsubSubs = subscribeCollection('subscribers', setSubscribers);
+    return () => {
+      unsubApps();
+      unsubSubs();
+    };
   }, []);
 
-  /* Count applications that haven't been opened yet */
-  const unreadCount = useMemo(
+  const unreadApplications = useMemo(
     () => applications.filter((a) => (a.status || 'new') === 'new').length,
     [applications]
   );
+
+  const subscriberCount = subscribers.length;
+
+  const getBadge = (path) => {
+    if (path === '/admin/applications' && unreadApplications > 0) {
+      return {
+        count: unreadApplications,
+        color: 'bg-red-500 text-white',
+        dot: 'bg-red-500',
+      };
+    }
+    if (path === '/admin/newsletter' && subscriberCount > 0) {
+      return {
+        count: subscriberCount,
+        color: 'bg-gray-900 text-white',
+        dot: 'bg-gray-900',
+      };
+    }
+    return null;
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -61,22 +90,23 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
+    <div className="min-h-screen bg-gray-50">
+      {/* ============ SIDEBAR ============ */}
       <aside
-        className={` inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform lg:translate-x-0 lg:static fixed lg:inset-auto ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-200 lg:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="h-16 flex items-center px-6 border-b border-gray-200">
+        {/* Brand */}
+        <div className="h-16 flex items-center px-6 border-b border-gray-200 shrink-0">
           <span className="font-bold text-gray-900">Admin Panel</span>
         </div>
 
-        <nav className="p-4 space-y-1">
+        {/* Nav — scrolls internally if too tall */}
+        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isApplications = item.to === '/admin/applications';
-            const showBadge = isApplications && unreadCount > 0;
+            const badge = getBadge(item.to);
 
             return (
               <NavLink
@@ -96,30 +126,24 @@ const AdminLayout = () => {
                   <>
                     <div className="relative flex-shrink-0">
                       <Icon className="w-4 h-4" />
-                      {/* Notification dot on the icon itself (mobile-friendly) */}
-                      {showBadge && (
+                      {badge && (
                         <span
                           className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ring-2 ${
-                            isActive
-                              ? 'bg-red-500 ring-black'
-                              : 'bg-red-500 ring-white'
-                          }`}
+                            isActive ? 'ring-black' : 'ring-white'
+                          } ${badge.dot}`}
                         />
                       )}
                     </div>
 
                     <span className="flex-1">{item.label}</span>
 
-                    {/* Count badge on the right */}
-                    {showBadge && (
+                    {badge && (
                       <span
                         className={`text-[10px] font-semibold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center ${
-                          isActive
-                            ? 'bg-white text-black'
-                            : 'bg-red-500 text-white'
+                          isActive ? 'bg-white text-black' : badge.color
                         }`}
                       >
-                        {unreadCount > 99 ? '99+' : unreadCount}
+                        {badge.count > 99 ? '99+' : badge.count}
                       </span>
                     )}
                   </>
@@ -129,8 +153,9 @@ const AdminLayout = () => {
           })}
         </nav>
 
-        <div className="absolute bottom-0 inset-x-0 p-4 ">
-          <div className="text-xs ml-3 text-gray-500 truncate mb-2">
+        {/* User + Sign out — always at bottom, never scrolls */}
+        <div className="p-4 border-t border-gray-200 shrink-0 bg-white">
+          <div className="text-xs text-gray-500 truncate mb-2 ml-1">
             {user?.email}
           </div>
           <button
@@ -142,7 +167,7 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Overlay for mobile */}
+      {/* Mobile overlay */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-30 lg:hidden"
@@ -150,17 +175,19 @@ const AdminLayout = () => {
         />
       )}
 
-      {/* Main */}
-      <main className="flex-1 min-w-0">
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8">
+      {/* ============ MAIN — offset by sidebar width on desktop ============ */}
+      <main className="lg:pl-64">
+        {/* Sticky header */}
+        <header className="sticky top-0 z-20 h-16 bg-white/95 backdrop-blur-sm border-b border-gray-200 flex items-center justify-between px-4 lg:px-8">
           <button
             className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
             onClick={() => setOpen(!open)}
+            aria-label="Toggle sidebar"
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-          <div className="text-sm text-gray-500 ml-auto">
-            Admin <User className="w-4 h-4 inline-block ml-1" />
+          <div className="text-sm text-gray-500 ml-auto flex items-center gap-1">
+            Admin <User className="w-4 h-4" />
           </div>
         </header>
 

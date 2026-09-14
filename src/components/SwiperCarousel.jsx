@@ -4,6 +4,7 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { useFirestoreCollection } from '../hooks/useFirestore';
+import logo from '../images/Logo/superlogo.png'
 
 export default function SwiperCarousel() {
   const { data: slides, loading } = useFirestoreCollection('heroSlides');
@@ -13,13 +14,23 @@ export default function SwiperCarousel() {
   );
 
   if (loading) {
-    return <div className="w-full h-screen bg-gray-900 animate-pulse" />;
-  }
+      return (
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="flex flex-col animate-pulse items-center gap-3">
+            <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
+          </div>
+        </div>
+      );
+    }
 
   if (ordered.length === 0) {
     return (
-      <div className="w-full h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-white/60 text-sm">No hero slides yet.</p>
+      <div className="h-screen bg-white flex items-center justify-center">
+          <div className="flex flex-col font-semibold items-center gap-3">
+            <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
+            <p>Oops, You're Offline</p>
+            <p>Connect to the internet and try again.</p>
+          </div>
       </div>
     );
   }

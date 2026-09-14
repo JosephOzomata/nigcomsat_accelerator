@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Video, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useFirestoreCollection } from '../hooks/useFirestore';
+import logo from '../images/Logo/superlogo.png';
 
 /* ---------- Aspect ratio pool for masonry tiles ----------
    Rotated by index so adjacent tiles rarely share the same shape */
@@ -159,9 +160,8 @@ const Gallery = () => {
   if (loadingCats || loadingItems) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
-          <span className="text-sm text-gray-500">Loading gallery...</span>
+        <div className="flex flex-col animate-pulse items-center gap-3">
+          <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
         </div>
       </div>
     );
@@ -180,15 +180,8 @@ const Gallery = () => {
             transition={{ duration: 0.5 }}
             className="max-w-3xl"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <span className="px-3 py-1 text-xs font-medium bg-black text-white rounded-full">
-                Gallery
-              </span>
-              <span className="text-sm text-gray-500">
-                Moments from the programme
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight mb-4">
+            
+            <h1 className="text-4xl mt-5 md:text-6xl font-bold text-gray-900 tracking-tight mb-4">
               Our Story in Frames
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl">
