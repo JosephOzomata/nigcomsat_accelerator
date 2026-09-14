@@ -9,6 +9,7 @@ import {
   Outlet,
 } from 'react-router-dom';
 
+import logo from './images/Logo/superlogo.png';
 /* ---------- Public pages ---------- */
 import Home from './pages/Home';
 import Spacefest from './pages/Spacefest';
@@ -72,11 +73,13 @@ const ProtectedRoute = () => {
   const { user, isAdmin, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 text-sm">
-        Checking access...
-      </div>
-    );
+      return (
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="flex flex-col animate-pulse items-center gap-3">
+            <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
+          </div>
+        </div>
+      );
   }
 
   if (!user || !isAdmin) return <Navigate to="/admin-login" replace />;

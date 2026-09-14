@@ -28,7 +28,7 @@ const cards = [
   { to: '/admin/mentors', label: 'Mentors', desc: 'Mentor profiles by cohort', icon: Users },
   { to: '/admin/portfolio', label: 'Portfolio', desc: 'Portfolio entries', icon: Briefcase },
   { to: '/admin/application-settings', label: 'Apply Settings', desc: 'Open or close applications', icon: Settings,},
-  { to: '/admin/site-info', label: 'Site Info', desc: 'Footer, contact, and social links', icon: Info },
+  // { to: '/admin/site-info', label: 'Site Info', desc: 'Footer, contact, and social links', icon: Info },
 ];
 
 const AdminDashboard = () => {

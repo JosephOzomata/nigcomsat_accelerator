@@ -38,7 +38,7 @@ const navItems = [
   { to: '/admin/curriculum', label: 'Curriculum', icon: BookOpen },
   { to: '/admin/applications', label: 'Applications', icon: Inbox },
   { to: '/admin/application-settings', label: 'Apply Settings', icon: Settings },
-  { to: '/admin/site-info', label: 'Site Info', icon: Info },
+  // { to: '/admin/site-info', label: 'Site Info', icon: Info },
 ];
 
 const AdminLayout = () => {
@@ -154,17 +154,7 @@ const AdminLayout = () => {
         </nav>
 
         {/* User + Sign out — always at bottom, never scrolls */}
-        <div className="p-4 border-t border-gray-200 shrink-0 bg-white">
-          <div className="text-xs text-gray-500 truncate mb-2 ml-1">
-            {user?.email}
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition"
-          >
-            <LogOut className="w-4 h-4" /> Sign out
-          </button>
-        </div>
+        
       </aside>
 
       {/* Mobile overlay */}
@@ -186,8 +176,14 @@ const AdminLayout = () => {
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-          <div className="text-sm text-gray-500 ml-auto flex items-center gap-1">
+          <div className=" text-gray-500 ml-auto flex items-center gap-1">
             Admin <User className="w-4 h-4" />
+            <button
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-2 px-2 cursor-pointer py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition"
+          >
+            <LogOut className="w-4 h-4" /> 
+          </button>
           </div>
         </header>
 
