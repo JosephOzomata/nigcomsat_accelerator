@@ -119,7 +119,7 @@ const Footer = () => {
           <div>
             <p
               onClick={triggerAdmin}
-              className="text-lg text-[#8a8a8a] cursor-pointer"
+              className="text-lg text-[#8a8a8a] "
             >
               Abuja Nigeria
             </p>
