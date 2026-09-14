@@ -80,7 +80,7 @@ const NavBar = () => {
   }, []);
 
   const desktopLinkClass = ({ isActive }) =>
-    `relative px-4 py-2 rounded-xl text-sm font-bold tracking-wide transition-all ${
+    `relative px-4 py-2 text-md rounded-xl font-bold tracking-wide transition-all ${
       isActive
         ? 'text-[#1a1a1a]'
         : 'text-[#8a8a8a] hover:text-[#1a1a1a] hover:bg-[#f5f5f5]'
@@ -101,12 +101,12 @@ const NavBar = () => {
             {/* ===== Top row ===== */}
             <div className="relative flex items-center justify-center lg:justify-between">
               {/* Left — desktop only */}
-              <div className="hidden lg:flex flex-1 items-center gap-1">
+              <div className="hidden lg:flex flex-1 items-center gap-13">
                 {/* SpaceFest dropdown */}
                 <div className="relative" ref={desktopDropdownRef}>
                   <button
                     onClick={() => setShowDropdown((p) => !p)}
-                    className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold tracking-wide transition-all ${
+                    className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-md font-bold tracking-wide transition-all ${
                       showDropdown
                         ? 'bg-[#f5f5f5] text-[#1a1a1a]'
                         : 'text-[#8a8a8a] hover:bg-[#f5f5f5] hover:text-[#1a1a1a]'
@@ -184,7 +184,7 @@ const NavBar = () => {
                 </Link>
 
               {/* Right — desktop only */}
-              <div className="hidden lg:flex flex-1 items-center justify-end gap-1">
+              <div className="hidden lg:flex flex-1 items-center justify-end gap-13">
                 <NavLink to="/events" className={desktopLinkClass}>
                   {({ isActive }) => (
                     <>
@@ -200,7 +200,7 @@ const NavBar = () => {
                 <div className="relative" ref={desktopDropdownRef2}>
                   <button
                     onClick={() => setShowDropdown2((p) => !p)}
-                    className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold tracking-wide transition-all ${
+                    className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-md font-bold tracking-wide transition-all ${
                       showDropdown2
                         ? 'bg-[#f5f5f5] text-[#1a1a1a]'
                         : 'text-[#8a8a8a] hover:bg-[#f5f5f5] hover:text-[#1a1a1a]'

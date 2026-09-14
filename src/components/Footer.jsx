@@ -18,6 +18,7 @@ import {
   RiTwitterXFill,
   RiWhatsappFill,
 } from 'react-icons/ri';
+import { FaLinkedin } from "react-icons/fa";
 
 import logo from '../images/Logo/superlogo.png';
 import { db } from '../services/firebase';
@@ -214,17 +215,17 @@ const Footer = () => {
           </div>
 
           <div className="flex gap-6 mt-10">
-            <a href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-600 transition-colors">
+            <a href="https://www.facebook.com/nigcomsat/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-700 transition-colors">
               <RiFacebookCircleFill size={35} />
             </a>
-            <a href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-pink-600 transition-colors">
+            <a href="https://x.com/NigComSat1R" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-pink-600 transition-colors">
               <RiInstagramLine size={35} />
             </a>
-            <a href="#" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors">
+            <a href="https://x.com/NigComSat1R" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors">
               <RiTwitterXFill size={35} />
             </a>
-            <a href="#" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-emerald-600 transition-colors">
-              <RiWhatsappFill size={35} />
+            <a href="https://ng.linkedin.com/company/nigcomsat" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-600 transition-colors">
+              <FaLinkedin size={35} />
             </a>
           </div>
         </div>

@@ -5,6 +5,7 @@ import {
   useFirestoreCollection,
   useFirestoreDoc,
 } from '../hooks/useFirestore';
+import logo from '../images/Logo/superlogo.png';
 
 const Portfolio = () => {
   const { data: rawItems, loading } = useFirestoreCollection('portfolio');
@@ -66,12 +67,11 @@ const Portfolio = () => {
   const activeItems = activeCohort ? grouped.get(activeCohort) ?? [] : [];
 
   /* ---------- Loading state ---------- */
-  if (loading) {
+ if (loading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center mt-30 mb-20">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
-          <span className="text-sm text-gray-500">Loading portfolio...</span>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col animate-pulse items-center gap-3">
+          <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
         </div>
       </div>
     );

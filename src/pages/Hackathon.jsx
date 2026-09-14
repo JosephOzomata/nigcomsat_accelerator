@@ -18,6 +18,7 @@ import {
   ArrowDown,
 } from 'lucide-react';
 import { useFirestoreCollection } from '../hooks/useFirestore';
+import logo from '../images/Logo/superlogo.png';
 
 const Hackathon = () => {
   const [viewMode, setViewMode] = useState('grid');
@@ -77,10 +78,9 @@ const Hackathon = () => {
   /* ---------- Loading state ---------- */
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin" />
-          <span className="text-sm text-gray-500">Loading hackathons...</span>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col animate-pulse items-center gap-3">
+          <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
         </div>
       </div>
     );
@@ -116,17 +116,7 @@ const Hackathon = () => {
               Environmental, Agricultural, and Health Intelligence Across
               Nigeria & Africa.
             </p>
-            <div className="flex flex-wrap items-center gap-6 text-sm text-white/70 mb-8">
-              <span className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" /> August 2026
-              </span>
-              <span className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" /> Nigeria (Hybrid)
-              </span>
-              <span className="flex items-center gap-2">
-                <Users className="w-4 h-4" /> 50+ Participants
-              </span>
-            </div>
+            
             <div className="flex flex-wrap gap-4">
               <a
                 href="/apply"
