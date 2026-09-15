@@ -2,7 +2,15 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
-import { Plus, Pencil, Trash2, X, Loader2, Save } from 'lucide-react';
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  X,
+  Loader2,
+  Save,
+  AlertTriangle,
+} from 'lucide-react';
 import {
   subscribeCollection,
   createItem,
@@ -26,6 +34,10 @@ const MentorsEditor = () => {
   const [items, setItems] = useState([]);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
+
+  /* ---------- Confirm modal state ---------- */
+  const [confirmState, setConfirmState] = useState(null);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     const unsub = subscribeCollection('mentors', setItems);
@@ -60,13 +72,34 @@ const MentorsEditor = () => {
     }
   };
 
-  const remove = async (id) => {
-    if (!confirm('Delete this mentor?')) return;
-    await deleteItem('mentors', id);
-    toast.success('Deleted');
+  /* ---------- Delete with confirm modal ---------- */
+  const requestDelete = (mentor) => {
+    setConfirmState({
+      title: 'Delete mentor?',
+      message: `Remove "${mentor.name}" from the mentors list? This cannot be undone.`,
+      confirmLabel: 'Delete mentor',
+      onConfirm: async () => {
+        await deleteItem('mentors', mentor.id);
+        toast.success('Mentor deleted');
+      },
+    });
   };
 
-  /* Group by cohort for the list view */
+  const runConfirm = async () => {
+    if (!confirmState?.onConfirm) return;
+    setConfirming(true);
+    try {
+      await confirmState.onConfirm();
+      setConfirmState(null);
+    } catch (e) {
+      console.error(e);
+      toast.error('Delete failed');
+    } finally {
+      setConfirming(false);
+    }
+  };
+
+  /* ---------- Group by cohort for the list ---------- */
   const grouped = items.reduce((acc, m) => {
     const key = m.cohort || 'Ungrouped';
     (acc[key] = acc[key] || []).push(m);
@@ -76,12 +109,13 @@ const MentorsEditor = () => {
   return (
     <>
       <Toaster position="top-right" />
+
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Mentors</h1>
             <p className="text-sm text-gray-500 mt-1">
-              Each unique cohort becomes a tab on the homepage.
+              Each unique cohort becomes a tab on the homepage and mentors page.
             </p>
           </div>
           <button
@@ -94,7 +128,7 @@ const MentorsEditor = () => {
 
         {Object.keys(grouped).length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-gray-500 text-sm">
-            No mentors yet.
+            No mentors yet. Click "New Mentor" to add one.
           </div>
         ) : (
           <div className="space-y-6">
@@ -103,11 +137,12 @@ const MentorsEditor = () => {
                 key={cohort}
                 className="bg-white border border-gray-200 rounded-xl overflow-hidden"
               >
-                <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
                   <span className="text-sm font-semibold text-gray-900">
                     {cohort} ({mentors.length})
                   </span>
                 </div>
+
                 <div className="divide-y divide-gray-100">
                   {mentors
                     .sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
@@ -140,7 +175,7 @@ const MentorsEditor = () => {
                           <Pencil className="w-4 h-4 text-gray-600" />
                         </button>
                         <button
-                          onClick={() => remove(m.id)}
+                          onClick={() => requestDelete(m)}
                           className="p-2 rounded-lg hover:bg-red-50 transition"
                         >
                           <Trash2 className="w-4 h-4 text-red-500" />
@@ -154,6 +189,7 @@ const MentorsEditor = () => {
         )}
       </div>
 
+      {/* ---------- Edit / New Modal ---------- */}
       <AnimatePresence>
         {editing && (
           <motion.div
@@ -245,6 +281,69 @@ const MentorsEditor = () => {
                     <Save className="w-4 h-4" />
                   )}
                   {saving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ---------- Delete Confirm Modal ---------- */}
+      <AnimatePresence>
+        {confirmState && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => !confirming && setConfirmState(null)}
+            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 10 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl w-full max-w-md shadow-xl"
+            >
+              <div className="flex justify-end p-3">
+                <button
+                  onClick={() => setConfirmState(null)}
+                  disabled={confirming}
+                  className="p-1.5 rounded-lg hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <X className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
+
+              <div className="px-6 pb-6 -mt-2">
+                <div className="w-11 h-11 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-4">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {confirmState.title}
+                </h3>
+                <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+                  {confirmState.message}
+                </p>
+              </div>
+
+              <div className="px-6 pb-6 flex justify-end gap-2">
+                <button
+                  onClick={() => setConfirmState(null)}
+                  disabled={confirming}
+                  className="px-4 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={runConfirm}
+                  disabled={confirming}
+                  className="px-5 py-2.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 flex items-center gap-2 disabled:opacity-60"
+                >
+                  {confirming && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {confirmState.confirmLabel || 'Delete'}
                 </button>
               </div>
             </motion.div>

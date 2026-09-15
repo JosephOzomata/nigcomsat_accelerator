@@ -4,7 +4,7 @@ import SwiperCarousel from '../components/SwiperCarousel';
 import StepsTimeline2 from '../components/StepsTimeline2.0';
 import Launchpad from '../components/Launchpad';
 import Alumini from '../components/Alumini';
-import Mentors from '../components/Mentors';
+import MentorSection  from '../components/Mentors';
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
       <StepsTimeline2 />
       <Launchpad />
       <Alumini />
-      <Mentors />
+      <MentorSection limit={3} />
     </>
   );
 };

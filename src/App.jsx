@@ -1,16 +1,6 @@
-// src/App.jsx
 import './App.css';
-import react from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  Outlet,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 
-import logo from './images/Logo/superlogo.png';
-/* ---------- Public pages ---------- */
 import Home from './pages/Home';
 import Spacefest from './pages/Spacefest';
 import About from './pages/About';
@@ -20,26 +10,23 @@ import Hackathon from './pages/Hackathon';
 import Events from './pages/Events';
 import Accelerator from './pages/Accelerator';
 import Portfolio from './pages/Portfolio';
-
-/* ---------- Cohort pages ---------- */
-import Cohort1 from './pages/cohorts/Cohort1';
-import Cohort2 from './pages/cohorts/Cohort2';
-import Cohort3 from './pages/cohorts/Cohort3';
-import LaunchPage from './pages/cohorts/LaunchPage';
+import Mentors from './pages/Mentors';
+import Partners from './pages/Partners';
+import Facilitators from './pages/Facilitators';
+import Testimonials from './pages/Testimonials';
+import CohortPage from './pages/cohorts/CohortPage';
 import CurriculumPage from './pages/cohorts/CurriculumPage';
 
-/* ---------- Layout ---------- */
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import SmoothScroll from './components/SmoothScroll';
-import ScrollToTop from './components/ScrollToTop';
 import ScrollProgress from './components/ScrollProgress';
+import ScrollToTop from './components/ScrollToTop';
+import logo from './images/logo/superlogo.png';
 import BackgroundBoxes from './components/BackgroundBoxes';
 
-/* ---------- Auth ---------- */
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-/* ---------- Admin pages ---------- */
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -53,11 +40,14 @@ import PortfolioEditor from './pages/admin/PortfolioEditor';
 import CurriculumEditor from './pages/admin/CurriculumEditor';
 import NewsletterEditor from './pages/admin/NewsletterEditor';
 import ApplicationsEditor from './pages/admin/ApplicationsEditor';
+import ApplicationSettingsEditor from './pages/admin/ApplicationSettingsEditor';
 import GalleryEditor from './pages/admin/GalleryEditor';
 import SiteInfoEditor from './pages/admin/SiteInfoEditor';
-import ApplicationSettingsEditor from './pages/admin/ApplicationSettingsEditor';
+import CohortsEditor from './pages/admin/CohortsEditor';
+import PartnersEditor from './pages/admin/PartnersEditor';
+import FacilitatorsEditor from './pages/admin/FacilitatorsEditor';
+import TestimonialsEditor from './pages/admin/TestimonialsEditor';
 
-/* ---------- Public layout ---------- */
 const PublicLayout = () => (
   <>
     <ScrollProgress />
@@ -68,10 +58,8 @@ const PublicLayout = () => (
   </>
 );
 
-/* ---------- Protected route ---------- */
 const ProtectedRoute = () => {
   const { user, isAdmin, loading } = useAuth();
-
   if (loading) {
       return (
         <div className="min-h-screen bg-white flex items-center justify-center">
@@ -81,9 +69,7 @@ const ProtectedRoute = () => {
         </div>
       );
   }
-
   if (!user || !isAdmin) return <Navigate to="/admin-login" replace />;
-
   return <Outlet />;
 };
 
@@ -93,9 +79,7 @@ function App() {
       <SmoothScroll>
         <AuthProvider>
           <ScrollToTop />
-
           <Routes>
-            {/* ---------- Public routes ---------- */}
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/spacefest" element={<Spacefest />} />
@@ -106,23 +90,23 @@ function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/accelerator" element={<Accelerator />} />
               <Route path="/portfolio" element={<Portfolio />} />
-              <Route path="/accelerator/cohort-1" element={<Cohort1 />} />
-              <Route path="/accelerator/cohort-2" element={<Cohort2 />} />
-              <Route path="/accelerator/cohort-3" element={<Cohort3 />} />
-              <Route path="/accelerator/launch" element={<LaunchPage />} />
-              <Route
-                path="/accelerator/curriculum"
-                element={<CurriculumPage />}
-              />
+              <Route path="/mentors" element={<Mentors />} />
+              <Route path="/partners" element={<Partners />} />
+              <Route path="/facilitators" element={<Facilitators />} />
+              <Route path="/accelerator/cohort/:slug" element={<CohortPage />} />
+              <Route path="/accelerator/curriculum" element={<CurriculumPage />} />
+              <Route path="/accelerator/testimonials" element={<Testimonials />} />
             </Route>
 
-            {/* ---------- Admin login (no NavBar/Footer) ---------- */}
             <Route path="/admin-login" element={<AdminLogin />} />
 
-            {/* ---------- Admin panel (protected) ---------- */}
             <Route element={<ProtectedRoute />}>
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
+                <Route path="cohorts" element={<CohortsEditor />} />
+                <Route path="partners" element={<PartnersEditor />} />
+                <Route path="facilitators" element={<FacilitatorsEditor />} />
+                <Route path="testimonials" element={<TestimonialsEditor />} />
                 <Route path="hero-slides" element={<HeroSlidesEditor />} />
                 <Route path="launchpad" element={<LaunchpadEditor />} />
                 <Route path="events" element={<EventsEditor />} />
@@ -133,13 +117,12 @@ function App() {
                 <Route path="curriculum" element={<CurriculumEditor />} />
                 <Route path="newsletter" element={<NewsletterEditor />} />
                 <Route path="applications" element={<ApplicationsEditor />} />
+                <Route path="application-settings" element={<ApplicationSettingsEditor />} />
                 <Route path="gallery" element={<GalleryEditor />} />
                 <Route path="site-info" element={<SiteInfoEditor />} />
-                <Route path="application-settings" element={<ApplicationSettingsEditor />} />
               </Route>
             </Route>
 
-            {/* ---------- 404 fallback ---------- */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AuthProvider>

@@ -21,6 +21,7 @@ import {
 } from '../../services/firestore';
 import { sendBulkEmail } from '../../services/email';
 import { Field, Input, Textarea } from '../../components/admin/Field';
+import ImageUploader from '../../components/admin/ImageUploader';
 
 const formatDate = (ts) => {
   if (!ts) return '—';
@@ -48,6 +49,7 @@ const NewsletterEditor = () => {
   const [sending, setSending] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0, current: '' });
   const [sendResult, setSendResult] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     const unsub = subscribeCollection('subscribers', (data) => {
@@ -131,15 +133,43 @@ const NewsletterEditor = () => {
   };
 
   /* ---------- Send newsletter ---------- */
-  const openCompose = () => {
-    if (subscribers.length === 0) {
-      return toast.error('No subscribers to send to');
-    }
-    setSubject('');
-    setMessage('');
-    setSendResult(null);
-    setShowCompose(true);
-  };
+ const openCompose = () => {
+  if (subscribers.length === 0) return toast.error('No subscribers to send to');
+  setSubject('');
+  setMessage('');
+  setImageUrl('');
+  setSendResult(null);
+  setShowCompose(true);
+};
+
+const handleSend = async () => {
+  if (!subject.trim()) return toast.error('Subject is required');
+  if (!message.trim()) return toast.error('Message is required');
+
+  setSending(true);
+  setProgress({ done: 0, total: subscribers.length, current: '' });
+  setSendResult(null);
+
+  try {
+    const result = await sendBulkEmail(
+      {
+        subject: subject.trim(),
+        message: message.trim(),
+        image_url: imageUrl || '',
+      },
+      subscribers,
+      (done, total, email) => setProgress({ done, total, current: email })
+    );
+
+    setSendResult(result);
+    if (result.failed.length === 0) toast.success(`Sent to all ${result.success} subscribers`);
+    else toast.error(`Sent to ${result.success} · ${result.failed.length} failed`);
+  } catch (err) {
+    toast.error(err.message || 'Send failed');
+  } finally {
+    setSending(false);
+  }
+};
 
   const closeCompose = () => {
     if (sending) return;
@@ -147,37 +177,37 @@ const NewsletterEditor = () => {
     setSendResult(null);
   };
 
-  const handleSend = async () => {
-    if (!subject.trim()) return toast.error('Subject is required');
-    if (!message.trim()) return toast.error('Message is required');
+  // const handleSend = async () => {
+  //   if (!subject.trim()) return toast.error('Subject is required');
+  //   if (!message.trim()) return toast.error('Message is required');
 
-    setSending(true);
-    setProgress({ done: 0, total: subscribers.length, current: '' });
-    setSendResult(null);
+  //   setSending(true);
+  //   setProgress({ done: 0, total: subscribers.length, current: '' });
+  //   setSendResult(null);
 
-    try {
-      const result = await sendBulkEmail(
-        { subject: subject.trim(), message: message.trim() },
-        subscribers,
-        (done, total, email) => setProgress({ done, total, current: email })
-      );
+  //   try {
+  //     const result = await sendBulkEmail(
+  //       { subject: subject.trim(), message: message.trim() },
+  //       subscribers,
+  //       (done, total, email) => setProgress({ done, total, current: email })
+  //     );
 
-      setSendResult(result);
+  //     setSendResult(result);
 
-      if (result.failed.length === 0) {
-        toast.success(`Sent to all ${result.success} subscribers`);
-      } else {
-        toast.error(
-          `Sent to ${result.success} · ${result.failed.length} failed`
-        );
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(err.message || 'Send failed');
-    } finally {
-      setSending(false);
-    }
-  };
+  //     if (result.failed.length === 0) {
+  //       toast.success(`Sent to all ${result.success} subscribers`);
+  //     } else {
+  //       toast.error(
+  //         `Sent to ${result.success} · ${result.failed.length} failed`
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error(err.message || 'Send failed');
+  //   } finally {
+  //     setSending(false);
+  //   }
+  // };
 
   /* ---------- Render ---------- */
   const progressPct =
@@ -345,6 +375,20 @@ const NewsletterEditor = () => {
               </div>
 
               <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+                <ImageUploader
+  label="Header image (optional)"
+  value={imageUrl}
+  onChange={setImageUrl}
+/>
+
+<Field label="Subject">
+  <Input
+    value={subject}
+    onChange={(e) => setSubject(e.target.value)}
+    placeholder="NIGCOMSAT Accelerator — March Update"
+    disabled={sending}
+  />
+</Field>
                 <Field label="Subject">
                   <Input
                     value={subject}

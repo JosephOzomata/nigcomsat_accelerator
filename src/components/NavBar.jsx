@@ -1,23 +1,15 @@
 // src/components/NavBar.jsx
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import livelogo from '../images/Logo/centerLogo.png';
+import { subscribeCollection } from '../services/firestore';
 
 const spacefestLinks = [
   { to: '/spacefest', label: 'Spacefest' },
   { to: '/hackathon', label: 'Spacehacks' },
   { to: '/portfolio', label: 'Portfolio' },
-];
-
-const acceleratorLinks = [
-  { to: '/accelerator', label: 'Accelerator' },
-  { to: '/accelerator/launch', label: 'Launch of Accelerator' },
-  { to: '/accelerator/cohort-1', label: 'Cohort 1' },
-  { to: '/accelerator/cohort-2', label: 'Cohort 2' },
-  { to: '/accelerator/cohort-3', label: 'Cohort 3' },
-  { to: '/accelerator/curriculum', label: 'Curriculum' },
 ];
 
 const NavBar = () => {
@@ -26,10 +18,37 @@ const NavBar = () => {
   const [showMobileDropdown, setShowMobileDropdown] = useState(false);
   const [showMobileDropdown2, setShowMobileDropdown2] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [cohorts, setCohorts] = useState([]);
 
   const desktopDropdownRef = useRef(null);
   const desktopDropdownRef2 = useRef(null);
   const location = useLocation();
+
+  /* Subscribe to cohorts */
+  useEffect(() => {
+    const unsub = subscribeCollection('cohorts', (data) => {
+      setCohorts(
+        [...data].sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+      );
+    });
+    return () => unsub();
+  }, []);
+
+  /* Dynamic accelerator dropdown links */
+  const acceleratorLinks = useMemo(
+    () => [
+      { to: '/accelerator', label: 'Accelerator' },
+      ...cohorts.map((c) => ({
+  to: `/accelerator/cohort/${c.slug}`,
+  label: c.title,
+})),
+      { to: '/accelerator/curriculum', label: 'Curriculum' },
+      { to: '/accelerator/testimonials', label: 'Testimonials' },
+      { to: '/facilitators', label: 'Facilitators' },
+      { to: '/mentors', label: 'Mentors' },
+    ],
+    [cohorts]
+  );
 
   /* Close everything on route change */
   useEffect(() => {
@@ -175,13 +194,13 @@ const NavBar = () => {
 
               {/* Logo — centered on mobile */}
               <Link to="/" className="col-start-2 lg:col-start-auto">
-                  <div className="flex justify-center items-center gap-3">
-                    <img
-                      src={livelogo}
-                      className="w-25 h-25 absolute overflow-hidden rounded-full bg-white"
-                    />
-                  </div>
-                </Link>
+                <div className="flex justify-center items-center gap-3">
+                  <img
+                    src={livelogo}
+                    className="w-25 h-25 absolute overflow-hidden rounded-full bg-white"
+                  />
+                </div>
+              </Link>
 
               {/* Right — desktop only */}
               <div className="hidden lg:flex flex-1 items-center justify-end gap-13">
