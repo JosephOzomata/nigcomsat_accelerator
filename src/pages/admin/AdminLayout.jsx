@@ -8,7 +8,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { subscribeCollection } from '../../services/firestore';
 import BackgroundLogo from '../../components/admin/BackgroundLogo';
-import logo from '../../images/logo/superlogo.png'; // your existing logo path
+import logo from '../../images/Logo/superlogo.png'; // your existing logo path
 
 const navGroups = [
   {
