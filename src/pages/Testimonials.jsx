@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useFirestoreCollection } from '../hooks/useFirestore';
 import { MessageSquare, Quote } from 'lucide-react';
-import logo from '../images/logo/superlogo.png';
+import logo from '../images/Logo/superlogo.png';
 
 const Testimonials = () => {
   const { data: testimonials, loading } = useFirestoreCollection('testimonials');

@@ -9,7 +9,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useFirestoreCollection } from '../../hooks/useFirestore';
 import PersonCard from '../../components/PersonCard';
-import logo from '../../images/logo/superlogo.png';
+import logo from '../../images/Logo/superlogo.png';
 
 const placeIcon = (p) => p === 1 ? Trophy : p === 2 ? Award : Sparkles;
 
