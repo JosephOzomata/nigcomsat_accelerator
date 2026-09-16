@@ -22,8 +22,8 @@ import Footer from './components/Footer';
 import SmoothScroll from './components/SmoothScroll';
 import ScrollProgress from './components/ScrollProgress';
 import ScrollToTop from './components/ScrollToTop';
-import logo from './images/logo/superlogo.png';
 import BackgroundBoxes from './components/BackgroundBoxes';
+import logo from './images/Logo/superlogo.png';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 
