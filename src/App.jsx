@@ -23,7 +23,7 @@ import SmoothScroll from './components/SmoothScroll';
 import ScrollProgress from './components/ScrollProgress';
 import ScrollToTop from './components/ScrollToTop';
 import BackgroundBoxes from './components/BackgroundBoxes';
-import logo from './images/Logo/superlogo.png';
+// import logo from './images/Logo/superlogo.png';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -64,7 +64,7 @@ const ProtectedRoute = () => {
       return (
         <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="flex flex-col animate-pulse items-center gap-3">
-            <img src={logo} alt="NIGCOMSAT Accelerator" className="w-16 h-16" />
+            <h1>Loading...</h1>
           </div>
         </div>
       );
