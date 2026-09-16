@@ -8,7 +8,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { subscribeCollection } from '../../services/firestore';
 import BackgroundLogo from '../../components/admin/BackgroundLogo';
-import logoImg from '../../images/logo/superlogo.png'; // your existing logo path
+import logo from '../../images/logo/superlogo.png'; // your existing logo path
 
 const navGroups = [
   {
@@ -96,7 +96,7 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-gray-50">
       
     <BackgroundLogo
-  imageSrc={logoImg}
+  imageSrc={logo}
   size={6}             // world units — bigger = larger logo
   opacity={0.08}       // 0.05 barely visible · 0.15 quite present
   speed={0.5}         // radians/sec — 0.08 = very slow (78s/rev) · 0.3 = faster
